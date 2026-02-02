@@ -1,0 +1,144 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    background-color: black;
+}
+
+#espace {
+    height: 100vh;
+    background: transparent;
+    position: relative;
+}
+
+
+#approche {
+    height: 100vh;
+    background: transparent;
+    position: relative;
+    overflow: hidden;
+
+}
+
+#planetes {
+    height: 100vh;
+    background: linear-gradient(to bottom, transparent, #0d3b0d 40%, #0d3b0d);
+}
+
+
+#futur {
+    height: 100vh;
+    background: linear-gradient(to bottom, #0d3b0d, #2d1b4e);
+}
+
+
+
+section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+
+h1 {
+    color: white;
+    font-size: 3rem;
+    font-weight: 700;
+}
+
+p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.2rem;
+}
+ 
+
+
+#planet-canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+
+ section div {
+    position: relative;
+    z-index: 2;
+}
+
+
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2rem;
+    }
+    
+    p {
+        font-size: 1rem;
+    }
+}
+
+.scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 2;
+}
+
+.scroll-indicator p {
+    font-size: 0.8rem;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.arrow {
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid white;
+    border-bottom: 2px solid white;
+    transform: rotate(45deg);
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        margin-top: 0px;
+    }
+    50% {
+        margin-top: 10px;
+    }
+}
+
+.contact-btn {
+    display: inline-block;
+    margin-top: 30px;
+    padding: 15px 40px;
+    border: 1px solid white;
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: background 0.3s, color 0.3s;
+}
+
+.contact-btn:hover {
+    background: white;
+    color: black;
+}
+
+
+
