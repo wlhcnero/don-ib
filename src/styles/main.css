@@ -1,0 +1,343 @@
+/* ═══════════════════════════════════════════════════════════
+   Solar System Portfolio — Styles
+   Direction: invisible UI, contemplative, elegant
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Reset ───────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  background: #010108;
+  color: #e8e8ec;
+  overflow-x: hidden;
+  cursor: default;
+}
+
+/* ── Canvas ──────────────────────────────────────────────── */
+
+#canvas-container {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+}
+
+#canvas-container canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── Scroll spacer (invisible) ───────────────────────────── */
+
+#scroll-spacer {
+  position: relative;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ── Scroll indicator ────────────────────────────────────── */
+
+#scroll-indicator {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+#scroll-indicator-track {
+  width: 2px;
+  height: 120px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+#scroll-indicator-thumb {
+  width: 100%;
+  height: 0%;
+  background: rgba(255, 200, 100, 0.6);
+  border-radius: 1px;
+  transition: height 0.1s ease-out;
+}
+
+#scroll-hint {
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  writing-mode: vertical-rl;
+  transition: opacity 0.8s ease;
+}
+
+/* ── Cursor hint ─────────────────────────────────────────── */
+
+#cursor-hint {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+/* ── Overlays (shared) ───────────────────────────────────── */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(1, 1, 8, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.overlay.hidden {
+  display: none;
+}
+
+.overlay-content {
+  max-width: 560px;
+  width: 90%;
+  padding: 48px;
+}
+
+.overlay-close {
+  position: absolute;
+  top: 32px;
+  right: 32px;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1.5rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.overlay-close:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+  transform: rotate(90deg);
+}
+
+/* ── About overlay ───────────────────────────────────────── */
+
+.overlay-title {
+  font-size: 2.5rem;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #ffcc66, #ff8833);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.overlay-role {
+  font-size: 0.8rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 200, 100, 0.7);
+  margin-bottom: 32px;
+}
+
+.overlay-manifesto {
+  font-style: italic;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 32px;
+  padding-left: 16px;
+  border-left: 2px solid rgba(255, 170, 51, 0.4);
+}
+
+.overlay-bio p {
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.55);
+  margin-bottom: 16px;
+}
+
+/* ── Project overlay ─────────────────────────────────────── */
+
+.overlay-tag {
+  display: inline-block;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 200, 100, 0.8);
+  border: 1px solid rgba(255, 200, 100, 0.3);
+  padding: 4px 12px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+}
+
+.overlay-project-title {
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  margin-bottom: 20px;
+}
+
+.overlay-project-description {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 28px;
+}
+
+.overlay-project-details {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.overlay-project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tech-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-family: 'Space Mono', monospace;
+}
+
+.overlay-project-year {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+.overlay-project-link {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #ffcc66;
+  text-decoration: none;
+  padding: 10px 24px;
+  border: 1px solid rgba(255, 200, 100, 0.4);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.overlay-project-link:hover {
+  background: rgba(255, 200, 100, 0.1);
+  border-color: rgba(255, 200, 100, 0.7);
+}
+
+/* ── Loader ──────────────────────────────────────────────── */
+
+#loader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #010108;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1s ease;
+}
+
+#loader.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#loader-inner {
+  text-align: center;
+}
+
+#loader-ring {
+  width: 48px;
+  height: 48px;
+  border: 2px solid rgba(255, 170, 51, 0.15);
+  border-top-color: rgba(255, 170, 51, 0.8);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+#loader-text {
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Responsive ──────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .overlay-content {
+    padding: 32px 24px;
+  }
+
+  .overlay-title {
+    font-size: 1.8rem;
+  }
+
+  .overlay-project-title {
+    font-size: 1.5rem;
+  }
+
+  .overlay-close {
+    top: 16px;
+    right: 16px;
+  }
+
+  #scroll-indicator {
+    right: 12px;
+  }
+
+  #scroll-indicator-track {
+    height: 80px;
+  }
+}
