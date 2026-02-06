@@ -77,8 +77,8 @@ export const CONFIG = {
 
   // ── Parallax ───────────────────────────────────────────
   parallax: {
-    intensity: 2.5, // how much the camera shifts with mouse
-    smoothing: 0.08, // lerp factor (lower = smoother)
+    intensity: 0.8, // very subtle lookAt offset
+    smoothing: 0.04, // low = smoother, less twitchy
   },
 
   // ── Orbit animation ───────────────────────────────────

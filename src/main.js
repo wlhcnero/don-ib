@@ -54,8 +54,9 @@ sceneManager.add(solarSystem.group);
 // 7. Camera scroll controller
 const cameraController = new CameraScrollController(sceneManager.camera);
 
-// 8. Mouse parallax
-const mouseParallax = new MouseParallax(sceneManager.camera);
+// 8. Mouse parallax (offset consumed by cameraController)
+const mouseParallax = new MouseParallax();
+cameraController.parallaxOffset = mouseParallax.offset;
 
 // 9. Audio manager
 const audioManager = new AudioManager();
@@ -91,7 +92,7 @@ sceneManager.onTick((delta, elapsed) => {
 
   // Camera
   cameraController.updateOrbit(delta);
-  mouseParallax.update(delta);
+  mouseParallax.update();
 
   // Interaction
   interactionManager.updateHover();

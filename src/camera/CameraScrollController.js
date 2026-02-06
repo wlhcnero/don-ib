@@ -18,6 +18,7 @@ export class CameraScrollController {
     this.lookTarget = new THREE.Vector3(0, 0, 0);
     this._savedPosition = null;
     this._savedLookTarget = null;
+    this.parallaxOffset = null; // set by main.js
 
     this._setupScrollSpacer();
     this._setupScrollTrigger();
@@ -52,10 +53,12 @@ export class CameraScrollController {
         this.camera.position.y = THREE.MathUtils.lerp(start.y, end.y, this.progress);
         this.camera.position.z = THREE.MathUtils.lerp(start.z, end.z, this.progress);
 
-        // Look ahead
+        // Look ahead + apply parallax offset
+        const px = this.parallaxOffset ? this.parallaxOffset.x : 0;
+        const py = this.parallaxOffset ? this.parallaxOffset.y : 0;
         this.lookTarget.set(
-          0,
-          0,
+          px,
+          py,
           this.camera.position.z - CONFIG.camera.lookAheadOffset,
         );
         this.camera.lookAt(this.lookTarget);

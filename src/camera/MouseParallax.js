@@ -1,38 +1,31 @@
+import * as THREE from 'three';
 import { CONFIG } from '../data/config.js';
 
 /**
- * MouseParallax — adds subtle camera rotation offset based on mouse position.
- * Uses rotation only (not position) to avoid conflicts with CameraScrollController.
- * Creates the feeling of depth even when not scrolling.
+ * MouseParallax — exposes a smooth offset vector based on mouse position.
+ * The CameraScrollController applies this offset to its lookAt target,
+ * so there's zero conflict with lookAt() or position interpolation.
  */
 export class MouseParallax {
-  constructor(camera) {
-    this.camera = camera;
-    this.targetX = 0;
-    this.targetY = 0;
-    this.currentX = 0;
-    this.currentY = 0;
+  constructor() {
+    this.offset = new THREE.Vector2(0, 0);
+    this._targetX = 0;
+    this._targetY = 0;
     this.enabled = true;
 
     window.addEventListener('mousemove', (e) => {
-      this.targetX = (e.clientX / window.innerWidth - 0.5) * 2;
-      this.targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+      this._targetX = (e.clientX / window.innerWidth - 0.5) * 2;
+      this._targetY = (e.clientY / window.innerHeight - 0.5) * 2;
     });
   }
 
-  /** Call each frame — applies a subtle rotation offset. */
+  /** Call each frame — smoothly lerps the offset toward mouse target. */
   update() {
     if (!this.enabled) return;
 
     const { intensity, smoothing } = CONFIG.parallax;
 
-    // Smooth lerp
-    this.currentX += (this.targetX - this.currentX) * smoothing;
-    this.currentY += (this.targetY - this.currentY) * smoothing;
-
-    // Apply as rotation offset (subtle head-tilt effect)
-    const rotScale = intensity * 0.008;
-    this.camera.rotation.y += -this.currentX * rotScale;
-    this.camera.rotation.x += this.currentY * rotScale * 0.5;
+    this.offset.x += (this._targetX * intensity - this.offset.x) * smoothing;
+    this.offset.y += (this._targetY * intensity - this.offset.y) * smoothing;
   }
 }
