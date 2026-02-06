@@ -87,13 +87,17 @@ export class CameraScrollController {
 
   /**
    * Fly the camera to orbit around a target position, disabling scroll control.
+   * After arriving, starts a slow cinematic orbit around the target.
    */
   flyTo(targetPosition, onComplete) {
     this.enabled = false;
+    this._orbitActive = false;
 
     // Save current state to restore later
     this._savedPosition = this.camera.position.clone();
     this._savedLookTarget = this.lookTarget.clone();
+    this._orbitTarget = targetPosition.clone();
+    this._orbitAngle = 0;
 
     const { orbitDistance, orbitHeight, transitionDuration } = CONFIG.interaction;
 
@@ -113,15 +117,35 @@ export class CameraScrollController {
         this.camera.lookAt(targetPosition);
       },
       onComplete: () => {
+        // Start slow orbit
+        this._orbitActive = true;
         if (onComplete) onComplete();
       },
     });
   }
 
   /**
+   * Per-frame update for slow orbit animation around the selected body.
+   */
+  updateOrbit(delta) {
+    if (!this._orbitActive || !this._orbitTarget) return;
+
+    const { speed, radius, height } = CONFIG.orbitCamera;
+    this._orbitAngle += speed * delta;
+
+    this.camera.position.x = this._orbitTarget.x + Math.cos(this._orbitAngle) * radius;
+    this.camera.position.z = this._orbitTarget.z + Math.sin(this._orbitAngle) * radius;
+    this.camera.position.y = this._orbitTarget.y + height + Math.sin(this._orbitAngle * 0.5) * 1.5;
+
+    this.camera.lookAt(this._orbitTarget);
+  }
+
+  /**
    * Return camera to its scroll-driven position.
    */
   returnToScroll(onComplete) {
+    this._orbitActive = false;
+
     if (!this._savedPosition) {
       this.enabled = true;
       return;
@@ -140,6 +164,7 @@ export class CameraScrollController {
         this.enabled = true;
         this._savedPosition = null;
         this._savedLookTarget = null;
+        this._orbitTarget = null;
         if (onComplete) onComplete();
       },
     });

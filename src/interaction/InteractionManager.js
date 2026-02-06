@@ -4,14 +4,17 @@ import { CONFIG } from '../data/config.js';
 
 /**
  * InteractionManager — raycasting for hover & click on celestial bodies.
+ * Integrates with AudioManager and CustomCursor.
  */
 export class InteractionManager {
-  constructor(camera, domElement, solarSystem, cameraController, overlayManager) {
+  constructor(camera, domElement, solarSystem, cameraController, overlayManager, audioManager, customCursor) {
     this.camera = camera;
     this.domElement = domElement;
     this.solarSystem = solarSystem;
     this.cameraController = cameraController;
     this.overlayManager = overlayManager;
+    this.audio = audioManager;
+    this.cursor = customCursor;
 
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
@@ -57,7 +60,7 @@ export class InteractionManager {
         this._unhover();
 
         this.hoveredObject = hit;
-        this.domElement.style.cursor = 'pointer';
+        this.domElement.style.cursor = 'none';
 
         // Scale up
         gsap.to(hit.scale, {
@@ -67,6 +70,12 @@ export class InteractionManager {
           duration: CONFIG.interaction.hoverDuration,
           ease: 'power2.out',
         });
+
+        // Audio feedback
+        if (this.audio) this.audio.playHover();
+
+        // Custom cursor hover state
+        if (this.cursor) this.cursor.setHover(true);
 
         // Show cursor hint
         this._showCursorHint();
@@ -101,7 +110,9 @@ export class InteractionManager {
       }
 
       this.hoveredObject = null;
-      this.domElement.style.cursor = 'default';
+      this.domElement.style.cursor = 'none';
+
+      if (this.cursor) this.cursor.setHover(false);
       this._hideCursorHint();
     }
   }
@@ -109,9 +120,7 @@ export class InteractionManager {
   /* ── Click ──────────────────────────────────────────── */
 
   _onClick(e) {
-    // If in orbit, click outside overlay to exit
     if (this.isInOrbit) {
-      // Only exit if clicking on canvas, not on overlay
       if (e.target === this.domElement || e.target.closest('#canvas-container')) {
         this._exitOrbit();
       }
@@ -124,6 +133,7 @@ export class InteractionManager {
 
     if (intersects.length > 0) {
       const hit = intersects[0].object;
+      if (this.audio) this.audio.playSelect();
       this._handleClick(hit);
     }
   }
@@ -146,6 +156,7 @@ export class InteractionManager {
     const target = this.solarSystem.sun.getWorldPosition();
     this.cameraController.flyTo(target, () => {
       this.overlayManager.showAbout();
+      if (this.cursor) this.cursor.hide();
     });
   }
 
@@ -158,12 +169,16 @@ export class InteractionManager {
     const target = planet.getWorldPosition();
     this.cameraController.flyTo(target, () => {
       this.overlayManager.showProject(planet.data);
+      if (this.cursor) this.cursor.hide();
     });
   }
 
   /* ── Exit orbit ─────────────────────────────────────── */
 
   _exitOrbit() {
+    if (this.audio) this.audio.playClose();
+    if (this.cursor) this.cursor.show();
+
     this.overlayManager.hideAll(() => {
       this.cameraController.returnToScroll(() => {
         this.isInOrbit = false;

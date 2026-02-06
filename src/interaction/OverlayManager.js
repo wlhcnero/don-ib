@@ -4,6 +4,7 @@ import { CONFIG } from '../data/config.js';
 /**
  * OverlayManager — controls the About and Project overlay panels.
  * All content is injected dynamically; overlays are hidden by default.
+ * Uses staggered animations for cinematic text reveals.
  */
 export class OverlayManager {
   constructor() {
@@ -28,7 +29,6 @@ export class OverlayManager {
   }
 
   _bindCloseButtons() {
-    // Close buttons trigger the same exit flow
     this.aboutOverlay.querySelector('.overlay-close').addEventListener('click', () => {
       this._onCloseRequest();
     });
@@ -37,11 +37,9 @@ export class OverlayManager {
     });
   }
 
-  /** External handler set by InteractionManager. */
   onClose = null;
 
   _onCloseRequest() {
-    // Dispatch a keyboard Escape so InteractionManager handles it uniformly
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
   }
 
@@ -57,14 +55,33 @@ export class OverlayManager {
 
   showAbout() {
     this.aboutOverlay.classList.remove('hidden');
+
+    // Fade in backdrop
     gsap.fromTo(
       this.aboutOverlay,
-      { opacity: 0, y: 30 },
+      { opacity: 0 },
+      { opacity: 1, duration: CONFIG.ui.overlayFadeIn, ease: 'power3.out' },
+    );
+
+    // Staggered content reveal
+    const elements = [
+      this.aboutTitle,
+      this.aboutRole,
+      this.aboutManifesto,
+      ...this.aboutBio.querySelectorAll('p'),
+    ];
+
+    gsap.fromTo(
+      elements,
+      { opacity: 0, y: 25, filter: 'blur(4px)' },
       {
         opacity: 1,
         y: 0,
-        duration: CONFIG.ui.overlayFadeIn,
+        filter: 'blur(0px)',
+        duration: 0.7,
+        stagger: CONFIG.ui.staggerDelay,
         ease: 'power3.out',
+        delay: 0.2,
       },
     );
   }
@@ -78,20 +95,40 @@ export class OverlayManager {
     this.projectYear.textContent = data.year;
     this.projectLink.href = data.link;
 
-    // Tech tags
     this.projectTech.innerHTML = data.tech
       .map((t) => `<span class="tech-tag">${t}</span>`)
       .join('');
 
     this.projectOverlay.classList.remove('hidden');
+
+    // Fade in backdrop
     gsap.fromTo(
       this.projectOverlay,
-      { opacity: 0, y: 30 },
+      { opacity: 0 },
+      { opacity: 1, duration: CONFIG.ui.overlayFadeIn, ease: 'power3.out' },
+    );
+
+    // Staggered content reveal
+    const elements = [
+      this.projectTag,
+      this.projectTitle,
+      this.projectDesc,
+      this.projectTech,
+      this.projectYear,
+      this.projectLink,
+    ];
+
+    gsap.fromTo(
+      elements,
+      { opacity: 0, y: 25, filter: 'blur(4px)' },
       {
         opacity: 1,
         y: 0,
-        duration: CONFIG.ui.overlayFadeIn,
+        filter: 'blur(0px)',
+        duration: 0.7,
+        stagger: CONFIG.ui.staggerDelay,
         ease: 'power3.out',
+        delay: 0.2,
       },
     );
   }
