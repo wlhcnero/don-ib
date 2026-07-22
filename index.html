@@ -2,63 +2,63 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Solar System Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0" />
+  <meta name="theme-color" content="#0A0B0D" />
+  <title>Pacte</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <!-- Three.js canvas container -->
-  <div id="canvas-container"></div>
-
-  <!-- Scroll spacer — drives the camera path -->
-  <div id="scroll-spacer"></div>
-
-  <!-- Scroll progress indicator -->
-  <div id="scroll-indicator">
-    <div id="scroll-indicator-track">
-      <div id="scroll-indicator-thumb"></div>
-    </div>
-    <span id="scroll-hint">Scroll to explore</span>
+  <!-- Dynamic Island — live countdown of the most urgent task -->
+  <div id="island" class="island" role="button" tabindex="0" aria-label="Tâche urgente">
+    <span class="island-dot" aria-hidden="true"></span>
+    <span class="island-title"></span>
+    <span class="island-count"></span>
   </div>
 
-  <!-- Cursor hint -->
-  <div id="cursor-hint">Click to discover</div>
+  <main id="app" class="app">
+    <!-- Home screen -->
+    <section id="screen-home" class="screen">
+      <header class="screen-head">
+        <div>
+          <p class="eyebrow">En jeu</p>
+          <h1 class="stake" id="stake-total">—</h1>
+        </div>
+        <p class="screen-sub" id="home-sub">Glisse une carte pour la valider.</p>
+      </header>
+      <div id="cards" class="cards"></div>
+      <p id="empty-state" class="empty hidden">Rien en jeu. Tout est réglé.</p>
+    </section>
 
-  <!-- About overlay (Sun click) -->
-  <div id="overlay-about" class="overlay hidden">
-    <button class="overlay-close" aria-label="Close">&times;</button>
-    <div class="overlay-content">
-      <h1 class="overlay-title"></h1>
-      <p class="overlay-role"></p>
-      <p class="overlay-manifesto"></p>
-      <div class="overlay-bio"></div>
-    </div>
-  </div>
+    <!-- Bilan screen -->
+    <section id="screen-bilan" class="screen hidden">
+      <header class="screen-head">
+        <div>
+          <p class="eyebrow">Bilan de la période</p>
+          <h1 class="stake" id="bilan-total">—</h1>
+        </div>
+        <p class="screen-sub">Ce qui est resté, ce qui a été transféré.</p>
+      </header>
+      <div id="sankey" class="sankey"></div>
+      <div id="bilan-legend" class="legend"></div>
+    </section>
+  </main>
 
-  <!-- Project overlay (Planet click) -->
-  <div id="overlay-project" class="overlay hidden">
-    <button class="overlay-close" aria-label="Close">&times;</button>
-    <div class="overlay-content">
-      <span class="overlay-tag"></span>
-      <h2 class="overlay-project-title"></h2>
-      <p class="overlay-project-description"></p>
-      <div class="overlay-project-details">
-        <div class="overlay-project-tech"></div>
-        <div class="overlay-project-year"></div>
-      </div>
-      <a class="overlay-project-link" href="#" target="_blank" rel="noopener">View project</a>
-    </div>
-  </div>
+  <!-- particle overlay for the dissolve effect -->
+  <canvas id="fx" class="fx" aria-hidden="true"></canvas>
 
-  <!-- Loading screen -->
-  <div id="loader">
-    <div id="loader-inner">
-      <div id="loader-ring"></div>
-      <p id="loader-text">Entering the solar system...</p>
-    </div>
-  </div>
+  <!-- Bottom navigation -->
+  <nav class="nav" role="tablist" aria-label="Navigation">
+    <button class="nav-item is-active" data-screen="home" role="tab" aria-selected="true">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="5.5" rx="2"/><rect x="4" y="13.5" width="16" height="5.5" rx="2"/></svg>
+      <span>Tâches</span>
+    </button>
+    <button class="nav-item" data-screen="bilan" role="tab" aria-selected="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h5c4 0 4 8 9 8" /><path d="M5 16h5" /></svg>
+      <span>Bilan</span>
+    </button>
+  </nav>
 
   <script type="module" src="/src/main.js"></script>
 </body>

@@ -1,7 +1,7 @@
 {
-  "name": "don-ib",
+  "name": "pacte",
   "version": "1.0.0",
-  "description": "",
+  "description": "Pacte — application de tâches à enjeu financier (UI calme et clinique)",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -15,9 +15,7 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "gsap": "^3.14.2",
-    "three": "^0.182.0",
+  "devDependencies": {
     "vite": "^7.3.1"
   }
 }
